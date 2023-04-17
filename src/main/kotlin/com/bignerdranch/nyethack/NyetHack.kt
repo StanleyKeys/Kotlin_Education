@@ -1,5 +1,6 @@
-var heroName: String = ""
+package com.bignerdranch.nyethack
 
+val player = Player()
 fun main() {
     /*
    narrate("A hero enters the town of Kronstadt. What is their name?", ::makeYellow)
@@ -13,11 +14,13 @@ fun main() {
    changeNarrationMood()
    */
 
-    heroName = promtHeroName()
-    narrate("$heroName, ${createTitle(heroName)}, heads to the town square")
+    narrate("${player.name} is ${player.title}")
+    player.changeName("Aurelia")
+
+    narrate("${player.name}, ${player.title}, heads to the town square")
 
     visitTavern()
-
+    player.castFireball()
 }
 
 private fun promtHeroName(): String {

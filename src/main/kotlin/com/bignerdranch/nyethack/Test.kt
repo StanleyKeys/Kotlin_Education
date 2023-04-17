@@ -1,4 +1,6 @@
-import javax.print.DocFlavor.STRING
+package com.bignerdranch.nyethack
+
+
 
 
 fun main() {
