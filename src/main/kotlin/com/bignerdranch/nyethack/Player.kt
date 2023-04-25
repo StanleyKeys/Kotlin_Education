@@ -43,6 +43,10 @@ class Player(
 
     override val diceCount = 5
     override val diceSides = 3
+
+    val inventory = mutableListOf<Loot>()
+
+    var gold = 0
     init {
         require(healthPoints > 0) { "healhPoints must be greater than zero" }
         require(name.isNotBlank()) { "Player must have a name" }

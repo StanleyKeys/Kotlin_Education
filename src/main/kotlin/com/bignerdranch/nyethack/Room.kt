@@ -4,6 +4,7 @@ open class Room(val name: String) {
 
     protected open val status = "Calm"
 
+    open val lootBox: LootBox<Loot> = LootBox.random()
     open fun description() = "$name (Currently: $status)"
     open fun enterRoom() {
         narrate("There is nothing to do here")

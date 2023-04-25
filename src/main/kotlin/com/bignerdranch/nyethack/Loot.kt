@@ -1,6 +1,9 @@
 package com.bignerdranch.nyethack
 
-class LootBox<T : Loot>(var contents: T) {
+import kotlin.random.Random
+import kotlin.random.nextInt
+
+class LootBox<out T : Loot>(val contents: T) {
     var isOpen = false
         private set
 
@@ -8,9 +11,22 @@ class LootBox<T : Loot>(var contents: T) {
         return contents.takeIf { !isOpen }
             .also { isOpen = true }
     }
+
+    companion object {
+        fun random(): LootBox<Loot> = LootBox(
+            contents = when (Random.nextInt(1..100)) {
+                in 1..5 -> Fez("fez of style", 150)
+                in 6.. 10 -> Fedora("fedora of knowledge", 125)
+                in 11..15 -> Fedora("stunning teal fedora", 75)
+                in 16..30 -> Fez("ordinary fez", 15)
+                in 31..50 -> Fedora( "ordinary fedora", 10)
+                else -> Gemstones(Random.nextInt(50..150))
+            }
+        )
+    }
 }
 
-class DropOffBox<T> where T : Loot, T : Sellable {
+class DropOffBox<in T> where T : Loot, T : Sellable {
     fun sellLoot(sellableLoot: T) : Int {
         return (sellableLoot.value * 0.7).toInt()
     }
@@ -24,10 +40,17 @@ interface Sellable {
     val value: Int
 }
 
+abstract class Hat: Loot(), Sellable
+
 class Fedora(
     override val name: String,
     override val value: Int
-) : Loot(), Sellable
+) : Hat()
+
+class Fez(
+    override val name: String,
+    override val value: Int
+) : Hat()
 
 class Gemstones(
     override val value: Int
