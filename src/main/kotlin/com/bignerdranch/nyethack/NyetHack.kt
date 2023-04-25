@@ -16,9 +16,22 @@ fun main() {
 
    changeNarrationMood()
    */
+
+
     narrate("Welcome to NyetHack!")
     val playerName = promtHeroName()
     player = Player(playerName)
+
+    val lootBoxOne: LootBox<Fedora> = LootBox(Fedora("a generic-looking fedora", 15))
+    val lootBoxTwo: LootBox<Gemstones> = LootBox(Gemstones(150))
+
+    repeat(2) {
+        narrate(
+            lootBoxOne.takeLoot()?.let {
+                "The hero retrieves ${it.name} from the box"
+            } ?: "The box is empty"
+        )
+    }
 
     Game.play()
 
