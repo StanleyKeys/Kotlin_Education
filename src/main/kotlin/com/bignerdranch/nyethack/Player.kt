@@ -3,13 +3,16 @@ package com.bignerdranch.nyethack
 class Player(
     initialName: String,
     val hometown: String = "Neversummer",
-    var healthPoints: Int,
+    override var healthPoints: Int,
     val isImmortal: Boolean
-) {
+) : Fightable {
 
-    var name = initialName
+    override var name = initialName
         get() = field.replaceFirstChar { it.uppercase() }
         private set(value) { field = value.trim() }
+
+
+
 
 //    val hometown = hometown
 //    var healthPoints = healthPoints
@@ -37,6 +40,9 @@ class Player(
             "best the world-eater"
         ).random()
     }
+
+    override val diceCount = 5
+    override val diceSides = 3
     init {
         require(healthPoints > 0) { "healhPoints must be greater than zero" }
         require(name.isNotBlank()) { "Player must have a name" }
@@ -63,5 +69,11 @@ class Player(
     fun prophesize() {
         narrate("$name thinks about their future")
         narrate("A fortune teller told Madrigal, \"$prophecy\"")
+    }
+
+    override fun takeDamage(damage: Int) {
+        if (!isImmortal) {
+            healthPoints -= damage
+        }
     }
 }

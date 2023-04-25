@@ -44,15 +44,25 @@ private fun promtHeroName(): String {
 object Game {
 
     private val worldMap = listOf(
-        listOf(TownSquare(), Tavern(), Room("Back Room")),
-        listOf(Room("A long Corridor"), Room("A Generic Room")),
-        listOf(Room("The Dungeon"))
+        listOf(
+            TownSquare(),
+            Tavern(),
+            Room("Back Room")
+        ),
+        listOf(
+            MonsterRoom("A long Corridor"),
+            Room("A Generic Room")
+        ),
+        listOf(
+            MonsterRoom("The Dungeon"),
+            MonsterRoom("The Dragon Lair", Dragon())
+        )
     )
 
     var gameMap = mutableListOf(
         mutableListOf("0", "0", "0"),
         mutableListOf("0", "0"),
-        mutableListOf("0")
+        mutableListOf("0", "0")
     )
 
     private var currentRoom: Room = worldMap[0][0]
@@ -90,6 +100,32 @@ object Game {
         }
     }
 
+    fun fight() {
+        val monsterRoom = currentRoom as? MonsterRoom
+        val currentMonster = monsterRoom?.monster
+        if (currentMonster == null) {
+            narrate("There's nothing to fight here")
+            return
+        }
+
+        while (player.healthPoints > 0 && currentMonster.healthPoints > 0) {
+            player.attack(currentMonster)
+            Thread.sleep(500)
+            if (currentMonster.healthPoints > 0) {
+                currentMonster.attack(player)
+            }
+            Thread.sleep(1000)
+        }
+
+        if (player.healthPoints <= 0) {
+            narrate(makeYellow("You have been defeated! Thanks for playing"))
+            exitProcess(0)
+        } else {
+            narrate(makeYellow("${currentMonster.name} has been defeated"))
+            monsterRoom.monster = null
+        }
+    }
+
     private class GameInput(arg: String?) {
         private val input = arg ?: ""
         val command = input.split(" ")[0]
@@ -98,6 +134,8 @@ object Game {
         val townSquare = TownSquare()
 
         fun proccessCommand() = when (command.lowercase()) {
+            "hp" -> narrate(makeYellow("Player has left ${player.healthPoints} HP"))
+            "fight" -> fight()
             "move" -> {
                 val direction = Direction.values()
                     .firstOrNull { it.name.equals(argument, ignoreCase = true) }
