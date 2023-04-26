@@ -32,15 +32,15 @@ class Goblin(
     description: String = "A nasty-looking goblin",
     healthPoints: Int = 50
 ) : Monster(name, description, healthPoints) {
-    override val diceCount = 3
+    override val diceCount = 2
     override val diceSides = 3
 }
 
 class Dragon(
     name: String = "Dragon",
     description: String = "An Ancient Dragon",
-    healthPoints: Int = 150
+    healthPoints: Int = 120
 ) : Monster(name, description, healthPoints) {
-    override val diceCount = 5
+    override val diceCount = 3
     override val diceSides = 3
 }

@@ -91,7 +91,8 @@ object Game {
 
     fun move(direction: Direction) {
         val newPosition = direction.updateCoordinate(currentPosition)
-        val newRoom = worldMap.getOrNull(newPosition.y)?.getOrNull(newPosition.x)
+//        val newRoom = worldMap.getOrNull(newPosition.y)?.getOrNull(newPosition.x)
+        val newRoom = worldMap[newPosition]
 
         if (newRoom != null) {
             narrate(makeYellow("The hero moves ${direction.name}"))
@@ -110,7 +111,12 @@ object Game {
             return
         }
 
+        var combatRound = 0
+        val previousNarrationModifier = narrationModifier
+        narrationModifier = { it.addEnthusiasm(enthusiasmLevel = combatRound)}
+
         while (player.healthPoints > 0 && currentMonster.healthPoints > 0) {
+            combatRound++
             player.attack(currentMonster)
             Thread.sleep(500)
             if (currentMonster.healthPoints > 0) {
@@ -118,6 +124,7 @@ object Game {
             }
             Thread.sleep(1000)
         }
+        narrationModifier = previousNarrationModifier
 
         if (player.healthPoints <= 0) {
             narrate(makeYellow("You have been defeated! Thanks for playing"))
