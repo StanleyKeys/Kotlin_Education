@@ -22,7 +22,8 @@ class Player(
         get() = when {
             name.all { it.isDigit() } -> "The Identifiable"     // Проверка на числа
             name.none { it.isLetter() } -> "The Witness Protection Member"  // Проверка на буквы
-            name.count { it.lowercase() in "aeiou" } > 4 -> "The Master of Vowel"   // Проверка на нижний регистр
+//            name.count { it.lowercase() in "aeiou" } > 4 -> "The Master of Vowel"   // Проверка на нижний регистр
+            name.numVowels > 4 -> "The Master of Vowels"
             name.all { it.isUpperCase() } -> "The Incredible!"  // Проверка на верхний регистр
             name.all { name.length > 8 } -> "The Spacious"      // Проверка на длину символов ( The Spacious - Пространный )
 

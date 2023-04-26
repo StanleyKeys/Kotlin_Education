@@ -13,12 +13,12 @@ fun main() {
    require(heroName != null && heroName.isNotEmpty()) {
        "The hero must have a name."
    }
+    */
+//    changeNarrationMood()
 
-   changeNarrationMood()
-   */
 
-
-    narrate("Welcome to NyetHack!")
+//    println("Welcome, Madrigal".frame())
+    narrate("Welcome to NyetHack!".frame())
     val playerName = promtHeroName()
     player = Player(playerName)
 
@@ -31,16 +31,15 @@ private fun promtHeroName(): String {
         // Выводит message желтым цветом
         "\u001b[33;1m$message\u001b[0m"
     }
-    /*
+
     val input = readLine()
     require(input != null && input.isNotEmpty()) {
         "The hero must have a name"
     }
     return input
-    */
-    println("Madrigal")
-    return "Madrigal"
 
+//    println("Madrigal")
+//    return "Madrigal"
 }
 
 object Game {
@@ -90,17 +89,19 @@ object Game {
     }
 
     fun move(direction: Direction) {
-        val newPosition = direction.updateCoordinate(currentPosition)
+//        val newPosition = direction.updateCoordinate(currentPosition)
 //        val newRoom = worldMap.getOrNull(newPosition.y)?.getOrNull(newPosition.x)
+
+        val newPosition = currentPosition move direction
         val newRoom = worldMap[newPosition]
 
-        if (newRoom != null) {
-            narrate(makeYellow("The hero moves ${direction.name}"))
-            currentPosition = newPosition
-            currentRoom = newRoom
-        } else {
-            narrate(makeYellow("You cannot move ${direction.name}"))
-        }
+//        if (newRoom != null) {
+        narrate(makeYellow("The hero moves ${direction.name}"))
+        currentPosition = newPosition
+        currentRoom = newRoom.orEmptyRoom()
+//        } else {
+//            narrate(makeYellow("You cannot move ${direction.name}"))
+//        }
     }
 
     fun fight() {
@@ -113,7 +114,7 @@ object Game {
 
         var combatRound = 0
         val previousNarrationModifier = narrationModifier
-        narrationModifier = { it.addEnthusiasm(enthusiasmLevel = combatRound)}
+        narrationModifier = { it.addEnthusiasm(enthusiasmLevel = combatRound) }
 
         while (player.healthPoints > 0 && currentMonster.healthPoints > 0) {
             combatRound++
@@ -157,8 +158,9 @@ object Game {
                         narrate("Your ${item.name} can't be sold")
                     }
                 }
-                player.inventory.removeAll { it is Sellable}
+                player.inventory.removeAll { it is Sellable }
             }
+
             else -> narrate("You cannot sell anything here")
         }
     }
@@ -182,6 +184,7 @@ object Game {
                     narrate(makeYellow("I don't know what direction that is"))
                 }
             }
+
             "take" -> {
                 if (argument.equals("loot", ignoreCase = true)) {
                     takeLoot()
